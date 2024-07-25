@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Background Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <section id="container">
+        <h1>Gradient <span>Background</span> Generator</h1>
+        <div class="buttons-container">
+            <button id="mybutton">#051937</button>
+            <button id="mybutton2">#008793</button>
+            <button id="myprev">Previous</button>
+        </div>
+        <h2>Click here to Copy</h2>
+        <div class="copycode" onclick="alert('Copied successfully')">
+            <p>background-image:linear-gradient(to right, #051937, #008793);</p>
+        </div>
+    </section>
+
+    <script>
+        let btn1 = document.getElementById("mybutton");
+        let btn2 = document.getElementById("mybutton2");
+        let btn3 = document.getElementById("myprev");
+        let copyDiv = document.querySelector(".copycode");
+
+        let rgb1 = "#051937";
+        let rgb2 = "#008793";
+        let colorHistory = [{ rgb1, rgb2 }];
+        let currentIndex = 0;
+
+        const hexValues = () => {
+            let myHexaValues = "0123456789abcdef";
+            let color = "#";
+            for (let i = 0; i < 6; i++) {
+                color += myHexaValues[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        };
+
+        const updateBackground = () => {
+            document.body.style.backgroundImage = `linear-gradient(to right, ${rgb1}, ${rgb2})`;
+            copyDiv.innerHTML = `background-image:linear-gradient(to right, ${rgb1}, ${rgb2});`;
+        };
+
+        const handleButton1 = () => {
+            rgb1 = hexValues();
+            btn1.innerText = rgb1;
+            colorHistory.push({ rgb1, rgb2 });
+            currentIndex = colorHistory.length - 1;
+            updateBackground();
+        };
+
+        const handleButton2 = () => {
+            rgb2 = hexValues();
+            btn2.innerText = rgb2;
+            colorHistory.push({ rgb1, rgb2 });
+            currentIndex = colorHistory.length - 1;
+            updateBackground();
+        };
+
+        const handlePrevious = () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                rgb1 = colorHistory[currentIndex].rgb1;
+                rgb2 = colorHistory[currentIndex].rgb2;
+                btn1.innerText = rgb1;
+                btn2.innerText = rgb2;
+                updateBackground();
+            }
+        };
+
+        btn1.addEventListener("click", handleButton1);
+        btn2.addEventListener("click", handleButton2);
+        btn3.addEventListener("click", handlePrevious);
+
+        copyDiv.addEventListener("click", () => {
+            navigator.clipboard.writeText(copyDiv.innerText);
+        });
+    </script>
+</body>
+</html>
